@@ -1,22 +1,69 @@
-## Ducky Tools
+# React + TypeScript + Vite
 
-**Coletânea escalável de ferramentas para automação e produtividade**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-DUCKY-Projs é um repositório de soluções desenvolvidas para otimizar diversos tipos de trabalho através de ferramentas personalizadas. Este projeto nasceu com o objetivo de centralizar utilitários úteis e escaláveis em uma única base modular, facilitando manutenção, evolução e reuso.
+Currently, two official plugins are available:
 
-### Primeira ferramenta: Sistema de automação de mensagens via WhatsApp
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-A primeira aplicação deste repositório é um sistema de automação para disparo de mensagens personalizadas via WhatsApp, ideal para notificações, marketing ou interações automatizadas.  
-A ferramenta é construída com foco em escalabilidade, modularidade e facilidade de uso.
+## Expanding the ESLint configuration
 
-### Tecnologias utilizadas
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **Next.js** – Framework full-stack baseado em React
-- **React** – Interface moderna e responsiva
-- **TypeScript** – Tipagem estática para segurança e clareza no código
-- **Prisma** – ORM moderno para interação com banco de dados
-- **Stack híbrida** – Unificação de frontend e backend em uma mesma base
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### Futuro do projeto
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-DUCKY-Projs está em constante expansão. Novas ferramentas e módulos serão adicionados ao longo do tempo, sempre com foco em resolver problemas reais de forma prática e eficiente.
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
